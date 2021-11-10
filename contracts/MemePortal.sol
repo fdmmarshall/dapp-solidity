@@ -30,6 +30,10 @@ contract MemePortal {
         emit NewMeme(msg.sender, block.timestamp, _ipsfFileUrl);
     }
 
+    function getAllMemes() public view returns (Meme[] memory) {
+        return memes;
+    }
+
     function getTotalMemes() public view returns (uint256) {
         console.log("We have %d total memes!", totalMemes);
         return totalMemes;
