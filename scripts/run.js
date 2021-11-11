@@ -6,9 +6,6 @@ const main = async () => {
   await memeContract.deployed();
   console.log('Contract addy:', memeContract.address);
 
-  // console.log("Contract deployed to:", memeContract.address);
-  // console.log("Contract deployed by:", owner.address);
-
   let contractBalance = await hre.ethers.provider.getBalance(
     memeContract.address
   );
@@ -21,10 +18,10 @@ const main = async () => {
   memeCount = await memeContract.getTotalMemes();
   console.log(memeCount.toNumber());
 
-  let memeTxn = await memeContract.sendMeme(
+  let memeTxn1 = await memeContract.sendMeme(
     'https://bafybeihko3uz7xx7ryhygibbzz7dr5g4hyyxntpuk6ujvvgdqbyacje7qi.ipfs.infura-ipfs.io/'
   );
-  await memeTxn.wait();
+  await memeTxn1.wait();
 
   contractBalance = await hre.ethers.provider.getBalance(memeContract.address);
   console.log(
@@ -33,6 +30,11 @@ const main = async () => {
   );
 
   const [_, randomPerson] = await hre.ethers.getSigners();
+  const memeTxn2 = await memeContract.sendMeme('This is meme #2');
+  await memeTxn2.wait();
+
+  const memeTxn3 = await memeContract.sendMeme('This is meme #3');
+  await memeTxn3.wait();
   memeTxn = await memeContract
     .connect(randomPerson)
     .sendMeme(
