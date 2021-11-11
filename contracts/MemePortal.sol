@@ -17,7 +17,7 @@ contract MemePortal {
 
     Meme[] memes;
 
-    constructor() {
+    constructor() payable {
         console.log("I AM SMART CONTRACT. POG.");
     }
 
