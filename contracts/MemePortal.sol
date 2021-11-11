@@ -7,6 +7,8 @@ import "hardhat/console.sol";
 contract MemePortal {
     uint256 totalMemes;
 
+    uint256 private seed;
+
     event NewMeme(address indexed from, uint256 timestamp, string ipfsFileUrl);
 
     struct Meme {
@@ -19,6 +21,8 @@ contract MemePortal {
 
     constructor() payable {
         console.log("I AM SMART CONTRACT. POG.");
+
+        seed = (block.timestamp + block.difficulty) % 100;
     }
 
     function sendMeme(string memory _ipsfFileUrl) public {
@@ -27,15 +31,19 @@ contract MemePortal {
 
         memes.push(Meme(msg.sender, _ipsfFileUrl, block.timestamp));
 
-        emit NewMeme(msg.sender, block.timestamp, _ipsfFileUrl);
+        seed = (block.difficulty + block.timestamp + seed) % 100;
 
-        uint256 prizeAmount = 0.000218 ether;
-        require(
-            prizeAmount <= address(this).balance,
-            "Trying to withdraw more money than the contract has."
-        );
-        (bool success, ) = (msg.sender).call{value: prizeAmount}("");
-        require(success, "Failed to withdraw money from contract.");
+        if (seed <= 50) {
+            uint256 prizeAmount = 0.000218 ether;
+            require(
+                prizeAmount <= address(this).balance,
+                "Trying to withdraw more money than the contract has."
+            );
+            (bool success, ) = (msg.sender).call{value: prizeAmount}("");
+            require(success, "Failed to withdraw money from contract.");
+        }
+
+        emit NewMeme(msg.sender, block.timestamp, _ipsfFileUrl);
     }
 
     function getAllMemes() public view returns (Meme[] memory) {
