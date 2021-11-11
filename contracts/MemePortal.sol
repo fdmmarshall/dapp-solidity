@@ -33,7 +33,7 @@ contract MemePortal {
 
         seed = (block.difficulty + block.timestamp + seed) % 100;
 
-        if (seed <= 50) {
+        if (seed <= 30) {
             uint256 prizeAmount = 0.000218 ether;
             require(
                 prizeAmount <= address(this).balance,
