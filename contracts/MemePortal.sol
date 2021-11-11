@@ -19,6 +19,8 @@ contract MemePortal {
 
     Meme[] memes;
 
+    mapping(address => uint256) public lastMemedAt;
+
     constructor() payable {
         console.log("I AM SMART CONTRACT. POG.");
 
@@ -26,6 +28,13 @@ contract MemePortal {
     }
 
     function sendMeme(string memory _ipsfFileUrl) public {
+        require(
+            lastMemedAt[msg.sender] + 30 seconds < block.timestamp,
+            "Must wait 30 seconds before send a meme again."
+        );
+
+        lastMemedAt[msg.sender] = block.timestamp;
+
         totalMemes += 1;
         console.log("%s has sent you a meme!", msg.sender);
 
