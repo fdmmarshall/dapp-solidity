@@ -28,6 +28,14 @@ contract MemePortal {
         memes.push(Meme(msg.sender, _ipsfFileUrl, block.timestamp));
 
         emit NewMeme(msg.sender, block.timestamp, _ipsfFileUrl);
+
+        uint256 prizeAmount = 0.000218 ether;
+        require(
+            prizeAmount <= address(this).balance,
+            "Trying to withdraw more money than the contract has."
+        );
+        (bool success, ) = (msg.sender).call{value: prizeAmount}("");
+        require(success, "Failed to withdraw money from contract.");
     }
 
     function getAllMemes() public view returns (Meme[] memory) {
